@@ -36,6 +36,18 @@ class User < ApplicationRecord
   validates :name, length: {maximum: 20, minimum: 2}, uniqueness: true
   validates :introduction,length:{maximum:50}
 
+  def self.search_for(content,method)
+    if method == "perfect"
+      # name:がcontent(検索ワード)のものを取得
+      User.where(name: content)
+    elsif method == "partial"
+      User.where("name LIKE ?","%" + content + "%")
+    elsif method == "forward"
+      User.where("name LIKE ?",content+"%")
+    elsif method == "backward"
+      User.where("name LIKE ?","%"+content)
+    end
+  end
 
 
 end
